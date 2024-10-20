@@ -63,10 +63,15 @@ public class Control implements ManagePersonal{
         return socialPerfomanceRecords;
     }
 
+    @Override
+    public void deleteSalesMan(int sid) {
+        salesmen.deleteOne(new Document("sid", sid));
+    }
 
-
-
-
+    @Override
+    public void deleteSocialPerformanceRecord(int sid) {
+        socialperfomance.deleteOne(new Document("sid", sid));
+    }
 
 
 }

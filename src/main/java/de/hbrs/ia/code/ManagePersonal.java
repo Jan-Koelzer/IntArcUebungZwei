@@ -12,13 +12,14 @@ public interface ManagePersonal {
      public void createSalesMan( SalesMan record );
 
      public void addSocialPerformanceRecord(SocialPerfomanceRecord record , SalesMan salesMan );
-     //Remark: an SocialPerformanceRecord corresponds to part B of a bonus sheet
 
      public SalesMan readSalesMan( int sid );
 
      public List<SalesMan> readAllSalesMen();
 
      public List<SocialPerfomanceRecord> readSocialPerformanceRecord( SalesMan salesMan );
-     //Remark: How do you integrate the year?
 
+     public  void deleteSalesMan( int sid );
+
+     public void deleteSocialPerformanceRecord(int sid);
 }
