@@ -3,18 +3,24 @@ package test;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import de.hbrs.ia.code.Control;
 import de.hbrs.ia.model.SalesMan;
+import de.hbrs.ia.model.SocialPerfomanceRecord;
 import org.bson.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class HighPerformanceTest {
 
     private MongoClient client;
     private MongoDatabase supermongo;
     private MongoCollection<Document> salesmen;
+    private MongoCollection<Document> socialPerfomanceRecords;
 
     /**
      * Attention: You might update the version of the Driver
@@ -28,10 +34,11 @@ class HighPerformanceTest {
         client = new MongoClient("localhost", 27017);
 
         // Get database 'highperformance' (creates one if not available)
-        supermongo = client.getDatabase("highperformanceNewTest");
+        supermongo = client.getDatabase("Uebung_zwei");
 
         // Get Collection 'salesmen' (creates one if not available)
         salesmen = supermongo.getCollection("salesmen");
+        socialPerfomanceRecords = supermongo.getCollection("socialPerformanceRecords");
     }
 
     @Test
@@ -77,5 +84,32 @@ class HighPerformanceTest {
 
         // Deletion
         salesmen.drop();
+    }
+
+    @Test
+    void roundtrip(){
+        SalesMan salesMan = new SalesMan( "Anon" , "Nymous" , 90444 );
+        SocialPerfomanceRecord socialPerformanceRecord = new SocialPerfomanceRecord(90444, 3, 3, 5, 3, 4, 4);
+
+        // Test insert to db
+        Control control = new Control(salesmen, socialPerfomanceRecords);
+        control.createSalesMan(salesMan);
+        SalesMan anonymous = control.readSalesMan(90444);
+        assertEquals(salesMan.getId(), anonymous.getId());
+
+        // Test socialPerformanceRecord
+        control.addSocialPerformanceRecord(socialPerformanceRecord, salesMan);
+        List<SocialPerfomanceRecord> testRecords = control.readSocialPerformanceRecord(salesMan);
+        assertEquals(testRecords.get(0).getSid(), socialPerformanceRecord.getSid());
+
+        // Test recorddeletion
+        control.deleteSocialPerformanceRecord(90444);
+        testRecords = control.readSocialPerformanceRecord(salesMan);
+        assertEquals(0, testRecords.size());
+
+        // Test salesMandeletion
+        control.deleteSalesMan(90444);
+        anonymous = control.readSalesMan(90444);
+        assertNull(anonymous);
     }
 }
