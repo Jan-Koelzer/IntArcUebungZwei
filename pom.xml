@@ -31,11 +31,12 @@
     </dependency>
 
 
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver-legacy</artifactId>
-            <version>4.1.0</version>
-        </dependency>
+    <dependency>
+        <groupId>org.mongodb</groupId>
+        <artifactId>mongodb-driver-legacy</artifactId>
+        <version>4.2.1</version>
+    </dependency>
+
 
 
     </dependencies>

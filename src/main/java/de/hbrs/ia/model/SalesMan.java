@@ -7,6 +7,8 @@ public class SalesMan {
     private String lastname;
     private Integer sid;
 
+    public SalesMan() {};
+
     public SalesMan(String firstname, String lastname, Integer sid) {
         this.firstname = firstname;
         this.lastname = lastname;
@@ -43,5 +45,13 @@ public class SalesMan {
         document.append("lastname" , this.lastname );
         document.append("sid" , this.sid);
         return document;
+    }
+
+    public static SalesMan documentToSalesMan(Document salesmanDoc) {
+        SalesMan salesMan = new SalesMan();
+        salesMan.setFirstname(salesmanDoc.getString("firstname"));
+        salesMan.setLastname(salesmanDoc.getString("lastname"));
+        salesMan.setId(salesmanDoc.getInteger("sid"));
+        return salesMan;
     }
 }
